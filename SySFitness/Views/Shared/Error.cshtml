@@ -1,0 +1,9 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<h1 class="text-danger">Error</h1>
+<div class="alert alert-danger">@(string.IsNullOrWhiteSpace(ViewBag.ErrorMessage) ?   "Ocurrió un error. Por favor intentá en unos minutos." : ViewBag.ErrorMessage)</div>
+

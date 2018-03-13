@@ -1,0 +1,84 @@
+﻿@model FacebookGoogleLogin.Models.ManageLoginsViewModel
+@using Microsoft.Owin.Security
+@{
+    ViewBag.Title = "Administrar Logins Externos";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+@{
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes().ToList();
+    if (!loginProviders.Any()) {
+        <div>
+            <p>
+                No hay servicios externos de Login configurados.
+            </p>
+        </div>
+    }
+    else
+    {
+        if (Model.CurrentLogins.Count > 0)
+        {
+            <h4>Logins registrados:</h4>
+            <table class="table">
+                <tbody>
+                    @foreach (var account in Model.CurrentLogins)
+                    {
+                        <tr>
+                            <td>@if (account.LoginProvider == "Google")
+                        {
+                                <div class="btn btn-large btn-google-plus btn-block" style="cursor: default;max-width: 150px;"><i class="fa fa-google-plus"></i> | Google+</div>
+                            }
+                            @if (account.LoginProvider == "Facebook")
+                        {
+                                <div class="btn btn-large btn-facebook btn-block" style="cursor: default;max-width: 150px;"><i class="fa fa-facebook"></i> | Facebook</div>
+                            }</td>
+                            <td>
+                                @if (ViewBag.ShowRemoveButton)
+                                {
+                                    using (Html.BeginForm("RemoveLogin", "Manage"))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <div>
+                                            @Html.Hidden("loginProvider", account.LoginProvider)
+                                            @Html.Hidden("providerKey", account.ProviderKey)
+                                            <input type="submit" class="btn btn-primary" value="Desconectar" title="Desconectar @account.LoginProvider de la cuenta"/>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    @: &nbsp;
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div>
+                <div class="alert alert-warning">
+                    No hay servicios externos de Login configurados.
+                </div>
+            </div>
+        }
+        @*if (Model.OtherLogins.Count > 0)
+        {
+            using (Html.BeginForm("LinkLogin", "Manage"))
+            {
+                @Html.AntiForgeryToken()
+                <div id="socialLoginList">
+                <p>
+                    @foreach (AuthenticationDescription p in Model.OtherLogins)
+                    {
+                        <button type="submit" class="btn btn-primary" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in usando tu @p.Caption cuenta">@p.AuthenticationType</button>
+                    }
+                </p>
+                </div>
+            }
+        }*@
+    }
+}
