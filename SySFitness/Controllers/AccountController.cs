@@ -232,13 +232,13 @@ namespace FacebookGoogleLogin.Controllers
                 // Send an email with this link
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                //await UserManager.SendEmailAsync(user.Id, "Recuperar contraseña", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                 var message = new IdentityMessage
                 {
                     Destination = model.Email,
-                    Body = $"Por favor reseteá el password de tu cuenta {ConfigurationManager.AppSettings["CompanyName"]} haciendo click <a href=\"" + callbackUrl + $"\">aquí</a>.",
-                    Subject = $"{ConfigurationManager.AppSettings["CompanyName"]} - Reset Password"
+                    Body = PrepareForgotPasswordEmailBody(callbackUrl),
+                    Subject = $"{ConfigurationManager.AppSettings["CompanyName"]} - Recuperar contraseña"
                 };
 
                 await UserManager.EmailService.SendAsync(message);
@@ -248,6 +248,16 @@ namespace FacebookGoogleLogin.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        private string PrepareForgotPasswordEmailBody(string callbackUrl)
+        {
+            var path = Server.MapPath("~/Content/EmailTemplates/ForgotPassword.html");
+            var body = System.IO.File.ReadAllText(path);
+            // replace tokens
+            body = body.Replace("{{COMPANY_NAME}}", ConfigurationManager.AppSettings["CompanyName"]);
+            body = body.Replace("{{RESET_PASSWORD_URL}}", callbackUrl);
+            return body;
         }
 
         //

@@ -39,17 +39,18 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Entrar" class="btn btn-primary" />
-                        <p style="margin-top: 20px;">
+                        <p style="margin-top: 20px;margin-bottom: 10px;">
                             @Html.ActionLink("Crear una cuenta nueva", "Register")
+                             @* Enable this once you have account confirmation enabled for password reset functionality*@
+                    <p>
+                        @Html.ActionLink("Olvidaste tu contraseña?", "ForgotPassword")
+                    </p>
                         </p>
                     </div>
 
                 </div>
 
-                @* Enable this once you have account confirmation enabled for password reset functionality*@
-                    <p>
-                        @Html.ActionLink("Olvidaste tu contraseña?", "ForgotPassword")
-                    </p>
+               
             }
         </section>
     </div>

@@ -26,15 +26,36 @@ namespace FacebookGoogleLogin
         {
             // Plug in your email service here to send an email.
             //return Task.FromResult(0);
-            var apiKey = ConfigurationManager.AppSettings["SendGridApiKey"];
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("no-reply@gofitness.com.ar");
-            var to = new EmailAddress(message.Destination);
-            var plainTextContent = message.Body;
-            var htmlContent = message.Body;
-            var msg = MailHelper.CreateSingleEmail(from, to, message.Subject, plainTextContent, htmlContent);
-            await client.SendEmailAsync(msg);
+            //var apiKey = ConfigurationManager.AppSettings["SendGridApiKey"];
+            //var client = new SendGridClient(apiKey);
+            //var from = new EmailAddress("no-reply@gofitness.com.ar");
+            //var to = new EmailAddress(message.Destination);
+            //var plainTextContent = message.Body;
+            //var htmlContent = message.Body;
+            //var msg = MailHelper.CreateSingleEmail(from, to, message.Subject, plainTextContent, htmlContent);
+            //await client.SendEmailAsync(msg);
+
+            await SendEmail(message.Destination, message.Subject, message.Body);
         }
+
+        private async Task SendEmail(string toEmailAddress, string emailSubject, string emailMessage)
+        {
+            using (var message = new MailMessage())
+            {
+                message.To.Add(toEmailAddress);
+                message.From = new MailAddress("no-reply@gofitness.com.ar");
+
+                message.Subject = emailSubject;
+                message.Body = emailMessage;
+                message.IsBodyHtml = true;
+
+                using (var smtpClient = new SmtpClient())
+                {
+                    await smtpClient.SendMailAsync(message);
+                }
+            }
+        }
+
     }
     
 

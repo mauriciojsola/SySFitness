@@ -27,34 +27,34 @@ namespace FacebookGoogleLogin.Models
 
     public class SetPasswordViewModel
     {
-        [Required(ErrorMessage = "Nuevo Password es requerido.")]
+        [Required(ErrorMessage = "La contraseña es requerida.")]
         [StringLength(100, ErrorMessage = "{0} debe contener al menos {2} caracteres.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Nuevo password")]
+        [Display(Name = "Nueva contraseña")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirmar nuevo password")]
-        [Compare("NewPassword", ErrorMessage = "El password y su confirmación no coinciden.")]
+        [Display(Name = "Confirmar nueva contraseña")]
+        [Compare("NewPassword", ErrorMessage = "La contraseña y su confirmación no coinciden.")]
         public string ConfirmPassword { get; set; }
     }
 
     public class ChangePasswordViewModel
     {
-        [Required(ErrorMessage = "Password es requerido.")]
+        [Required(ErrorMessage = "La contraseña es requerida.")]
         [DataType(DataType.Password)]
-        [Display(Name = "Password actual")]
+        [Display(Name = "Contraseña actual")]
         public string OldPassword { get; set; }
 
-        [Required(ErrorMessage = "Nuevo Password es requerido.")]
+        [Required(ErrorMessage = "La nueva contraseña es requerida.")]
         [StringLength(100, ErrorMessage = "{0} debe contener al menos {2} caracteres.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Nuevo password")]
+        [Display(Name = "Nueva contraseña")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirmar nuevo password")]
-        [Compare("NewPassword", ErrorMessage = "El password y su confirmación no coinciden.")]
+        [Display(Name = "Confirmar nueva contraseña")]
+        [Compare("NewPassword", ErrorMessage = "La contraseña y su confirmación no coinciden.")]
         public string ConfirmPassword { get; set; }
     }
 

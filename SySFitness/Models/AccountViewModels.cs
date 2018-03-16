@@ -55,9 +55,9 @@ namespace FacebookGoogleLogin.Models
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Password es requerido.")]
+        [Required(ErrorMessage = "La contraseña es requerida.")]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Contraseña")]
         public string Password { get; set; }
 
         [Display(Name = "recordarme?")]
@@ -71,15 +71,15 @@ namespace FacebookGoogleLogin.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Password es requerido.")]
+        [Required(ErrorMessage = "La contraseña es requerida.")]
         [StringLength(100, ErrorMessage = "{0} debe contener al menos {2} caracteres.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Contraseña")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirmar password")]
-        [Compare("Password", ErrorMessage = "El password y su confirmación no coinciden.")]
+        [Display(Name = "Confirmar contraseña")]
+        [Compare("Password", ErrorMessage = "La contraseña y su confirmación no coinciden.")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -90,15 +90,15 @@ namespace FacebookGoogleLogin.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Password es requerido.")]
+        [Required(ErrorMessage = "La contraseña es requerida.")]
         [StringLength(100, ErrorMessage = "{0} debe contener al menos {2} caracteres.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Contraseña")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "El password y su confirmación no coinciden.")]
+        [Display(Name = "Confirmar contraseña")]
+        [Compare("Password", ErrorMessage = "La contraseña y su confirmación no coinciden.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
