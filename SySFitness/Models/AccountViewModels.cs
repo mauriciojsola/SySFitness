@@ -102,6 +102,7 @@ namespace FacebookGoogleLogin.Models
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
+        public string UserId { get; set; }
     }
 
     public class ForgotPasswordViewModel

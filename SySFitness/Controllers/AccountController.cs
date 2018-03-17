@@ -106,7 +106,7 @@ namespace FacebookGoogleLogin.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Email o password no válido.");
+                    ModelState.AddModelError("", "Email o contraseña no válidos.");
                     return View(model);
             }
         }
@@ -257,6 +257,7 @@ namespace FacebookGoogleLogin.Controllers
             // replace tokens
             body = body.Replace("{{COMPANY_NAME}}", ConfigurationManager.AppSettings["CompanyName"]);
             body = body.Replace("{{RESET_PASSWORD_URL}}", callbackUrl);
+            body = body.Replace("{{YEAR}}", DateTime.Now.Year.ToString());
             return body;
         }
 
@@ -271,9 +272,21 @@ namespace FacebookGoogleLogin.Controllers
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
+        public async Task<ActionResult> ResetPassword(string code, string userId)
         {
-            return code == null ? View("Error") : View();
+            if (string.IsNullOrWhiteSpace(code))
+                return View("Error");
+
+            var model = new ResetPasswordViewModel();
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                var user = await UserManager.FindByIdAsync(userId);
+                if (user != null)
+                    model.Email = user.Email;
+
+            }
+
+            return View(model);
         }
 
         //
@@ -466,13 +479,24 @@ namespace FacebookGoogleLogin.Controllers
             var message = new IdentityMessage
             {
                 Destination = user.Email,
-                Body = "Por favor confirmá tu email <a href=\"" + callbackUrl + $"\">aquí</a> para activar tu cuenta de {ConfigurationManager.AppSettings["CompanyName"]}",
+                Body = PrepareConfirmAccountEmailBody(callbackUrl),
                 Subject = $"Confirmá tu cuenta de {ConfigurationManager.AppSettings["CompanyName"]}"
             };
 
             await UserManager.EmailService.SendAsync(message);
 
             return callbackUrl;
+        }
+
+        private string PrepareConfirmAccountEmailBody(string callbackUrl)
+        {
+            var path = Server.MapPath("~/Content/EmailTemplates/ConfirmAccount.html");
+            var body = System.IO.File.ReadAllText(path);
+            // replace tokens
+            body = body.Replace("{{COMPANY_NAME}}", ConfigurationManager.AppSettings["CompanyName"]);
+            body = body.Replace("{{CONFIRM_ACCOUNT_URL}}", callbackUrl);
+            body = body.Replace("{{YEAR}}", DateTime.Now.Year.ToString());
+            return body;
         }
 
         protected override void Dispose(bool disposing)
